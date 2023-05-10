@@ -52,7 +52,7 @@ function Home() {
       <div className="col" key={video.id}>
         <div className="card mb-4">
           <div className="card-body">
-            <iframe key={video.url} controls src={video.url}> 
+            <iframe key={video.url} controls src={video.url} title={video.name}> 
             
             </iframe>
             <p>

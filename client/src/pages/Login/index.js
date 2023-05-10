@@ -4,8 +4,29 @@ import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react';
 import { axiosInstance } from '../../lib/axios';
+import { GoogleLogin } from 'react-google-login';
+
+const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
 function Login() {
+  const handleLoginSuccess = async (response) => {
+    const { tokenId } = response;
+    try {
+      // Send the token to your server for validation and to obtain user information
+      const res = await axiosInstance.post('/auth/google/login', { token: tokenId });
+      // Handle the response from the server as needed
+      console.log(res.data);
+    } catch (error) {
+      // Handle error if authentication fails
+      console.error(error);
+    }
+  };
+
+  const handleLoginFailure = (error) => {
+    // Handle error if login fails
+    console.error(error);
+  };
+
   const navigate = useNavigate();
   const [error, setError] = useState(null);
 
@@ -61,6 +82,17 @@ function Login() {
             <button type="submit" className="btn btn-primary mb-3">Submit</button>
           </form>
           <p className="text-center"><a href="/register">Create an Account</a></p>
+
+          <div className='text-center'>
+            <p>Or log in with:</p>
+            <GoogleLogin
+              clientId={clientId}
+              buttonText="Login with Google"
+              onSuccess={handleLoginSuccess}
+              onFailure={handleLoginFailure}
+              cookiePolicy="single_host_origin"
+            />
+          </div>
         </div>
       </div>
     </>

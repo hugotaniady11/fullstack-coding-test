@@ -1,6 +1,7 @@
 const express = require("express");
 const { getAllUsers, getUserById, register, login, findUserByEmail, comparePasswords } = require("./user.service");
 const jwt = require('jsonwebtoken');
+const GoogleAuthController = require('./googleAuth.controller');
 
 const router = express.Router();
 
@@ -80,5 +81,8 @@ router.post("/login", async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 })
+
+router.get('/google', GoogleAuthController.login);
+router.get('/google/callback', GoogleAuthController.callback);
 
 module.exports = router;
